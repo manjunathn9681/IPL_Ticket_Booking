@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IPL Ticket Booking Form</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>IPL 2026 Ticket Booking</h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#matches">Matches</a>
+            <a href="booking.html">Book Ticket</a>
+        </nav>
+    </header>
+
+    <section class="booking">
+
+        <h2>IPL Ticket Booking Form</h2>
+
+        <div class="content">
+
+            <div class="card">
+
+                <form onsubmit="alert('Ticket Booking Form Submitted Successfully!'); return false;">
+
+                    <label>Name:</label>
+                    <input type="text"
+                           placeholder="Enter your name"
+                           minlength="3"
+                           maxlength="30"
+                           required>
+
+                    <label>Email:</label>
+                    <input type="email"
+                           placeholder="Enter your email"
+                           required>
+
+                    <label>Phone Number:</label>
+                    <input type="tel"
+                           placeholder="Enter 10 digit phone number"
+                           pattern="[0-9]{10}"
+                           minlength="10"
+                           maxlength="10"
+                           required>
+
+                    <label>Select Match:</label>
+                    <select required>
+                        <option value="">Select Match</option>
+                        <option>RCB vs CSK</option>
+                        <option>MI vs KKR</option>
+                        <option>SRH vs RR</option>
+                        <option>CSK vs MI</option>
+                    </select>
+
+                    <label>Stand Category:</label>
+                    <select required>
+                        <option value="">Select Stand</option>
+                        <option>General</option>
+                        <option>Premium</option>
+                        <option>VIP</option>
+                    </select>
+
+                    <label>Number of Tickets:</label>
+                    <input type="number"
+                           min="1"
+                           max="10"
+                           value="1"
+                           required>
+
+                    <h3>Additional Preference</h3>
+
+                    <label>
+                        <input type="radio" name="preference" value="Near Ground">
+                        Near Ground
+                    </label>
+
+                    <label>
+                        <input type="radio" name="preference" value="Family Stand">
+                        Family Stand
+                    </label>
+
+                    <label>
+                        <input type="radio" name="preference" value="No Preference" checked>
+                        No Preference
+                    </label>
+
+                    <br>
+
+                    <button type="submit">Submit Booking</button>
+
+                    <button type="reset">Reset Form</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        <p>IPL 2026 Ticket Booking Website</p>
+        <p>Copyright &copy; 2026 All Rights Reserved.</p>
+        <p>Reva University - CSE</p>
+    </footer>
+
+</body>
+</html>

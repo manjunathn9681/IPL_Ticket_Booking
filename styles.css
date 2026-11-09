@@ -253,3 +253,7 @@ footer p {
     margin-bottom: 5px;
     color: var(--text-muted);
 }
+input[type="radio"] {
+    width: auto;
+    margin-right: 8px;
+}
