@@ -14,7 +14,11 @@
     <header>
         <h1>IPL 2026 Ticket Booking</h1>
 
-        <nav>
+        <button class="hamburger" id="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            ☰
+        </button>
+
+        <nav class="navMenu" id="navMenu">
             <a href="#matches">Matches</a>
             <a href="#booking">Book Ticket</a>
             <a href="#mybookings">My Bookings</a>
@@ -76,7 +80,7 @@
 
         <label>Team Filter:</label>
 
-        <select id="teamFilter" onchange="filterMatches()">
+        <select id="teamFilter">
             <option value="All">All Teams</option>
             <option>RCB</option>
             <option>CSK</option>
@@ -148,6 +152,9 @@
                 </tr>
             </table>
         </div>
+
+        <button id="viewToggle" type="button">Show card view</button>
+        <div class="schedule-cards" id="scheduleCards"></div>
 
         <p><small>Note: Match details and prices are sample data for this academic project.</small></p>
     </section>
@@ -264,123 +271,7 @@
         <p>Reva University - CSE</p>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-
-        let prices = [
-            [1000, 2500, 5000],
-            [1200, 2800, 5500],
-            [900, 2200, 4500],
-            [1200, 3000, 6000]
-        ];
-
-        let teams = [
-            "RCB vs CSK",
-            "MI vs KKR",
-            "SRH vs RR",
-            "CSK vs MI"
-        ];
-
-        // Select Match
-        function selectMatch(n) {
-            document.getElementById("match").value = n;
-            calculate();
-            document.getElementById("booking").scrollIntoView();
-        }
-
-        // Filter Teams
-        function filterMatches() {
-            let team = document.getElementById("teamFilter").value;
-            let rows = document.querySelectorAll("#schedule tr");
-
-            for (let i = 1; i < rows.length; i++) {
-                rows[i].style.display =
-                    team == "All" || rows[i].cells[1].innerText.includes(team)
-                    ? "" : "none";
-            }
-        }
-
-        // Calculate Ticket Price
-        function calculate() {
-            let m = document.getElementById("match").value;
-            let s = document.getElementById("stand").value;
-            let q = Number(document.getElementById("quantity").value) || 0;
-
-            let categories = ["General", "Premium", "VIP"];
-            let price = m && s ? prices[m-1][categories.indexOf(s)] : 0;
-
-            document.getElementById("sMatch").innerText = m ? teams[m-1] : "Not Selected";
-            document.getElementById("sStand").innerText = s || "Not Selected";
-            document.getElementById("sPrice").innerText = price;
-            document.getElementById("sQuantity").innerText = q;
-            document.getElementById("sTotal").innerText = price * q;
-        }
-
-        document.getElementById("match").onchange = calculate;
-        document.getElementById("stand").onchange = calculate;
-        document.getElementById("quantity").oninput = calculate;
-
-        // Book Ticket
-        document.getElementById("bookingForm").onsubmit = function(e) {
-            e.preventDefault();
-
-            let m = document.getElementById("match").value;
-            let s = document.getElementById("stand").value;
-            let q = Number(document.getElementById("quantity").value);
-            let name = document.getElementById("name").value;
-
-            let categories = ["General", "Premium", "VIP"];
-            let price = prices[m-1][categories.indexOf(s)];
-            let total = price * q;
-
-            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-
-            let booking = {
-                id: "IPL" + Date.now(),
-                name: name,
-                match: teams[m-1],
-                stand: s,
-                quantity: q,
-                total: total
-            };
-
-            bookings.push(booking);
-
-            localStorage.setItem("bookings", JSON.stringify(bookings));
-
-            alert("Ticket Booked Successfully!");
-
-            displayBookings();
-            this.reset();
-            calculate();
-        };
-
-        // Display Bookings
-        function displayBookings() {
-            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-            let table = document.getElementById("bookingList");
-
-            table.innerHTML = "";
-
-            if (bookings.length == 0) {
-                table.innerHTML = "<tr><td colspan='6'>No bookings available yet.</td></tr>";
-            }
-
-            bookings.forEach(function(b) {
-                let row = table.insertRow();
-
-                [b.id, b.name, b.match, b.stand, b.quantity, "₹" + b.total]
-                .forEach(function(value) {
-                    row.insertCell().innerText = value;
-                });
-            });
-        }
-
-        // Load Previous Bookings
-        displayBookings();
-        calculate();
-
-    </script>
+    <script src="app.js"></script>
 
 </body>
 </html>
