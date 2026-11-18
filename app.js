@@ -14,7 +14,7 @@ let teams = [
 
 function selectMatch(number) {
     document.getElementById("match").value = number;
-    calculate();
+    updateBookingSummary();
     document.getElementById("booking").scrollIntoView();
 }
 
@@ -74,6 +74,42 @@ function calculate() {
     document.getElementById("sTotal").innerText = price * quantity;
 }
 
+let toastTimeout;
+
+function showToast(message) {
+    let toast = document.getElementById("bookingToast");
+
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "bookingToast";
+        toast.setAttribute("role", "status");
+        toast.setAttribute("aria-live", "polite");
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.right = "20px";
+        toast.style.padding = "12px 20px";
+        toast.style.backgroundColor = "#1a1a2e";
+        toast.style.color = "#ffffff";
+        toast.style.borderRadius = "5px";
+        toast.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+        toast.style.zIndex = "1001";
+        toast.style.display = "none";
+        document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.style.display = "block";
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function() {
+        toast.style.display = "none";
+    }, 2500);
+}
+
+function updateBookingSummary() {
+    calculate();
+    showToast("Booking summary updated.");
+}
+
 function displayBookings() {
     let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     let table = document.getElementById("bookingList");
@@ -110,9 +146,13 @@ document.getElementById("viewToggle").onclick = function() {
         : "Show card view";
 };
 
-document.getElementById("match").onchange = calculate;
-document.getElementById("stand").onchange = calculate;
-document.getElementById("quantity").oninput = calculate;
+let matchSelect = document.getElementById("match");
+let standSelect = document.getElementById("stand");
+let quantityInput = document.getElementById("quantity");
+
+matchSelect.addEventListener("change", updateBookingSummary);
+standSelect.addEventListener("change", updateBookingSummary);
+quantityInput.addEventListener("input", updateBookingSummary);
 
 document.getElementById("bookingForm").onsubmit = function(event) {
     event.preventDefault();
