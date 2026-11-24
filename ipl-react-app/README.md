@@ -1,16 +1,25 @@
-# React + Vite
+# IPL Ticket Booking
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Supabase setup
 
-Currently, two official plugins are available:
+1. Create a Supabase project.
+2. In the Supabase dashboard, open **SQL Editor**, paste the contents of `supabase/activity11.sql`, and run it. The script creates the tables and booking function, adds the six sample matches only when their IDs are absent, and enables the `matches` table in Realtime when the default publication is available.
+3. Copy `.env.example` to `.env`. In **Project Settings → API**, copy the **Project URL** into `VITE_SUPABASE_URL` and the **Publishable key** into `VITE_SUPABASE_PUBLISHABLE_KEY`.
+4. Restart the Vite development server after editing `.env`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The browser uses only the publishable key. Never put a database password, `service_role` key, or secret key in this app.
 
-## React Compiler
+## Run the app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm install
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+Run `npm run build` to create a production build.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Booking and security notes
+
+The `book_ticket` PostgreSQL function inserts a booking and reduces available seats in one transaction. Row-level security lets visitors read matches; booking writes are performed through this function rather than direct table writes. The anonymous publishable key is public by design, so this educational app does not verify customer identity and is vulnerable to spam or fake bookings. Add authentication, rate limiting, and payment/booking verification before using it for real sales.
+
+Realtime requires the `matches` table to be included in the `supabase_realtime` publication. The SQL script adds it when that publication exists; otherwise enable it for `matches` in the Supabase dashboard.
